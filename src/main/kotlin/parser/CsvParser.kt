@@ -27,7 +27,7 @@ object CsvParser {
             ),
             position = enumValueOf<Position>(values[3]),
             nationality = values[4],
-            agencyName = values[5],
+            agency = values[5].takeIf { it.isNotEmpty() },
             transferCost = values[6].toLong(),
             participations = values[7].toInt(),
             goals = values[8].toInt(),

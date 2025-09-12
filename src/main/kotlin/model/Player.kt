@@ -7,7 +7,7 @@ data class Player(
     val team: Team,
     val position: Position,
     val nationality: String,
-    val agencyName: String,
+    val agency: String?,
     val transferCost: Long,
     val participations: Int,
     val goals: Int,
