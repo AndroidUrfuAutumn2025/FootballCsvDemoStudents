@@ -5,10 +5,4 @@ enum class Position(val displayName: String) {
     DEFENDER("Защитник"),
     FORWARD("Нападающий"),
     GOALKEEPER("Вратарь");
-
-    companion object {
-        fun find(value: String): Position? {
-            return entries.find { it.name == value }
-        }
-    }
 }
