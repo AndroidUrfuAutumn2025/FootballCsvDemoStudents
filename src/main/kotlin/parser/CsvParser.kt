@@ -2,7 +2,6 @@ package parser
 
 import model.Player
 import model.Position
-import model.Team
 import java.io.File
 
 fun String?.toIntOrZero(): Int = this?.toIntOrNull() ?: 0
