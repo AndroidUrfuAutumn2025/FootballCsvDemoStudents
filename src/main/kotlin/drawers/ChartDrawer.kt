@@ -22,8 +22,9 @@ object ChartDrawer {
         val positionsToCounts = players.groupingBy { it.position }.eachCount()
         val total = players.size.toDouble()
 
-        val positions = positionsToCounts.map {
-            "${it.key.displayName} (${(it.value / total * 100)}%)"
+        val positions = positionsToCounts.map { (position, count) ->
+            val percent = count / total * 100
+            "${position.displayName} (${String.format("%.1f", percent)}%)"
         }
         val counts = positionsToCounts.values.toList()
 

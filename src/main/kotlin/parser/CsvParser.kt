@@ -13,10 +13,17 @@ object CsvParser {
             .readLines()
             .drop(1)
             .filter { it.isNotBlank() }
-            .map { mapFileLineToPlayer(it) }
+            .mapNotNull {
+                try {
+                    parseCsvLineToPlayer(it)
+                } catch (e: Exception) {
+                    println("Ошибка при парсинге строки \"$it\": $e")
+                    null
+                }
+            }
     }
 
-    private fun mapFileLineToPlayer(fileLine: String): Player {
+    private fun parseCsvLineToPlayer(fileLine: String): Player {
         val values = fileLine.split(CSV_DELIMITER)
 
         return Player(
