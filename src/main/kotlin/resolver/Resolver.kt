@@ -7,6 +7,17 @@ import parser.CsvParser
 class Resolver : IResolver {
     private val players: List<Player> = CsvParser.parsePlayers()
 
+    // Функция для перевода позиций на русский
+    private fun translatePosition(position: String): String {
+        return when (position.uppercase()) {
+            "FORWARD" -> "Нападающий"
+            "DEFENDER" -> "Защитник"
+            "MIDFIELD" -> "Полузащитник"
+            "GOALKEEPER" -> "Вратарь"
+            else -> position // На случай, если встретится неизвестная позиция
+        }
+    }
+
     override fun getCountWithoutAgency(): Int {
         return players.count { it.agency == null }
     }
@@ -24,7 +35,8 @@ class Resolver : IResolver {
             .filter { it.nationality.equals("Germany", ignoreCase = true) }
             .maxByOrNull { it.transferCost }
 
-        return germanPlayer?.position ?: ""
+        // Используем функцию перевода
+        return germanPlayer?.let { translatePosition(it.position) } ?: ""
     }
 
     override fun getTheRudestTeam(): Team {
