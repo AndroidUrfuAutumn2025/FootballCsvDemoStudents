@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
     println("getBestScorerDefender: " + resolver.getBestScorerDefender())
     println("CountWithoutAgency: " + resolver.getCountWithoutAgency())
     println("getTheExpensiveGermanPlayerPosition: " + resolver.getTheExpensiveGermanPlayerPosition())
-    println("График 10 самых дорогих команд в папке 'lets-plot-images'")
+    println("График: зависимость количества голов от трансферной стоимости в папке 'lets-plot-images'")
     val kandy = KandyPlot()
     kandy.main(data.first)
 }
