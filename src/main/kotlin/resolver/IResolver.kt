@@ -1,5 +1,6 @@
 package resolver
 
+import model.PositionData
 import model.Team
 
 interface IResolver {
@@ -15,4 +16,6 @@ interface IResolver {
 
     // Выберите команду с наибольшим числом удалений на одного игрока.
     fun getTheRudestTeam(): Team
+
+    fun getDistributionByPositions(): List<PositionData>
 }
