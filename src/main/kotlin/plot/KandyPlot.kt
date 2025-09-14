@@ -4,6 +4,7 @@ import org.jetbrains.kotlinx.kandy.dsl.plot
 import org.jetbrains.kotlinx.kandy.letsplot.export.save
 import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 import org.jetbrains.kotlinx.kandy.letsplot.layers.bars
+import org.jetbrains.kotlinx.kandy.letsplot.layers.points
 
 class KandyPlot {
     fun main(teams: List<Team>) {
@@ -22,7 +23,7 @@ class KandyPlot {
                 title = " relationship between the number of goals scored and the transfer value of forwards"
             }
 
-            bars {
+            points {
                 x("goals")
                 y("transfer_cost")
             }
