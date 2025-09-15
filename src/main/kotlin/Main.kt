@@ -21,15 +21,12 @@ fun main(args: Array<String>) {
     println(resolver.getCountWithoutAgency())
     println((resolver.getTheExpensiveGermanPlayerPosition()))
 
-    val rgfegt = list.groupBy { it.team }.map { Pair(it.key, it.value.map { it.RedCards }.average())}
-
     val pl = list.filter { it.Role == Roles.FORWARD }.map { Pair(it.Goals, it.Cost) }.sortedBy { it.first }
 
     val data = dataFrameOf(
         "Goals" to pl.sortedBy { it.second }.map { it.first },
         "Cost" to pl.sortedBy { it.second }.map { it.second }
     )
-
     plot(data){
         x("Cost")
         y("Goals")
@@ -44,5 +41,4 @@ fun main(args: Array<String>) {
             size = 700 to 500
         }
     }.save("C:\\Users\\user\\Documents\\GitHub\\FootballCsvDemoStudents\\Result.png")
-
 }
