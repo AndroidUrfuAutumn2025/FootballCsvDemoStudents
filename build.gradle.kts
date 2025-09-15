@@ -13,6 +13,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("org.knowm.xchart:xchart:3.8.8")
 }
 
 tasks.test {
@@ -25,4 +26,8 @@ kotlin {
 
 application {
     mainClass.set("MainKt")
+}
+
+tasks.withType<JavaExec> {
+    jvmArgs = listOf("-Dfile.encoding=UTF-8")
 }
