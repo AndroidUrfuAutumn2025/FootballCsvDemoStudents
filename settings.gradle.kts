@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "FootballCsvDemo"
+rootProject.name = "FootballCsvDemoStudents"
