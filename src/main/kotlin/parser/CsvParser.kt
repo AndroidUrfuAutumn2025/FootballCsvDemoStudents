@@ -1,40 +1,45 @@
 package parser
 
 import model.Player
+import model.Team
 import java.io.File
 
 object CsvParser {
-    private const val DELIMITER = ";"
-    private const val HEADER_LINES = 1
-
-    fun parseFile(pathName: String): List<Player> {
-        return File(pathName).useLines { lines ->
-            lines.drop(HEADER_LINES)
-                .mapNotNull { parseLine(it) }
-                .toList()
-        }
+    
+    fun parsePlayers(filePath: String): List<Player> {
+        val file = File(filePath)
+        
+        return file.readLines()
+            .drop(1)
+            .map { line ->
+                val parts = line.split(";")
+                
+                Player(
+                    name = parts[0].trim(),
+                    team = parts[1].trim(),
+                    city = parts[2].trim(),
+                    position = parts[3].trim(),
+                    nationality = parts[4].trim(),
+                    agency = parts[5].trim().takeIf { it.isNotEmpty() },
+                    transferCost = parts[6].trim().toLong(),
+                    participations = parts[7].trim().toInt(),
+                    goals = parts[8].trim().toInt(),
+                    assists = parts[9].trim().toInt(),
+                    yellowCards = parts[10].trim().toInt(),
+                    redCards = parts[11].trim().toInt()
+                )
+            }
     }
-
-    private fun parseLine(line: String): Player? {
-        return try {
-            val row = line.split(DELIMITER)
-            Player(
-                name = row[0],
-                team = row[1],
-                city = row[2],
-                position = row[3],
-                nationality = row[4],
-                agency = row[5],
-                transferCost = row[6].toInt(),
-                participations = row[7].toInt(),
-                goals = row[8].toInt(),
-                assists = row[9].toInt(),
-                yellowCards = row[10].toInt(),
-                redCards = row[11].toInt()
-            )
-        } catch (e: Exception) {
-            println("Ошибка при обработке строки: $line. Причина: ${e.message}")
-            null
-        }
+    
+    fun parseTeams(players: List<Player>): List<Team> {
+        return players
+            .groupBy { it.team }
+            .map { (teamName, teamPlayers) ->
+                Team(
+                    name = teamName,
+                    city = teamPlayers.first().city,
+                    players = teamPlayers
+                )
+            }
     }
 }

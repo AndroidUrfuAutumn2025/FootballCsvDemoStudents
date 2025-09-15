@@ -1,30 +1,20 @@
+import model.Player
+import model.Team
 import parser.CsvParser
 import resolver.Resolver
-import visualizer.ChartGenerator
+import visualization.ChartGenerator
 
 fun main(args: Array<String>) {
-    val pathName = "src/main/resources/fakePlayers.csv"
-    val players = CsvParser.parseFile(pathName)
-
-    val resolver = Resolver(players)
-    val playersWithoutAgencyAmount = resolver.getCountWithoutAgency()
+    val players = CsvParser.parsePlayers("src/main/resources/fakePlayers.csv")
+    val teams = CsvParser.parseTeams(players)
+    val resolver = Resolver(players, teams)
+    println("1. Количество игроков без агентства: ${resolver.getCountWithoutAgency()}")
     val bestDefender = resolver.getBestScorerDefender()
+    println("2. Лучший бомбардир среди защитников: ${bestDefender.first} (${bestDefender.second} голов)")
+    println("3. Позиция самого дорогого немецкого игрока: ${resolver.getTheExpensiveGermanPlayerPosition()}")
     val rudestTeam = resolver.getTheRudestTeam()
-    val mostExpensiveGermanPlayer = resolver.getTheExpensiveGermanPlayerPosition()
-
-    println("Игроков без агентства: $playersWithoutAgencyAmount")
-    println("Лучший защитник-бомбардир это ${bestDefender.first} с кол-вом голов ${bestDefender.second}")
-    println("Позиция самого дорогого немца: $mostExpensiveGermanPlayer")
-    println("Самая грубая команда: ${rudestTeam.name}")
-
-    ChartGenerator.createPositionPieChart(players, "img-output/players_positions.png")
-    println("Диаграмма сохранена в файл players_positions.png")
+    println("4. Команда с наибольшим средним числом красных карточек: ${rudestTeam.name}")
+    val forwardsData = resolver.getForwardsGoalsVsTransferCost()
+    val chart = ChartGenerator.createGoalsVsTransferCostChart(forwardsData)
+    ChartGenerator.saveChartAsPNG(chart, "forwards_goals_vs_transfer_cost.png")
 }
-
-
-
-
-
-
-
-

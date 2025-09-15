@@ -3,45 +3,47 @@ package resolver
 import model.Player
 import model.Team
 
-class Resolver(private val players: List<Player>) : IResolver {
-    private val positionTranslation = mapOf(
-        "GOALKEEPER" to "вратарь",
-        "DEFENDER" to "защитник",
-        "MIDFIELD" to "полузащитник",
-        "FORWARD" to "нападающий",
-    )
-
+class Resolver(private val players: List<Player>, private val teams: List<Team>) : IResolver {
+    
     override fun getCountWithoutAgency(): Int {
-        return players.count { it.agency.isBlank() }
+        return players.count { it.agency == null }
     }
-
+    
     override fun getBestScorerDefender(): Pair<String, Int> {
-        val defenders = players.filter { it.position == "DEFENDER" }
-        val best = defenders.maxByOrNull { it.goals }
-        return best?.let { it.name to it.goals } ?: ("Нет защитников" to 0)
+        val bestDefender = players
+            .filter { it.position == "DEFENDER" }
+            .maxByOrNull { it.goals }
+        
+        return if (bestDefender != null) {
+            Pair(bestDefender.name, bestDefender.goals)
+        } else {
+            Pair("Не найдено", 0)
+        }
     }
-
+    
     override fun getTheExpensiveGermanPlayerPosition(): String {
-        val germans = players.filter {
-            it.nationality == ("Germany")
+        val expensiveGermanPlayer = players
+            .filter { it.nationality == "Germany" }
+            .maxByOrNull { it.transferCost }
+        
+        return when (expensiveGermanPlayer?.position) {
+            "FORWARD" -> "Нападающий"
+            "DEFENDER" -> "Защитник"
+            "MIDFIELD" -> "Полузащитник"
+            "GOALKEEPER" -> "Вратарь"
+            else -> "Неизвестно"
         }
-        val expensive = germans.maxByOrNull { it.transferCost }
-        val position = expensive?.position ?: return "Не найден"
-
-        return positionTranslation[position] ?: expensive.position
+    }
+    
+    override fun getTheRudestTeam(): Team {
+        return teams.maxByOrNull { it.averageRedCards } ?: teams.first()
     }
 
-    override fun getTheRudestTeam(): Team {
-        val grouped = players.groupBy { it.team to it.city }
-
-        val rudest = grouped.maxByOrNull { (_, teamPlayers) ->
-            teamPlayers.sumOf { it.redCards }.toDouble() / teamPlayers.size
-        }
-
-        return Team(
-            name = rudest?.key?.first ?: "Нет данных",
-            city = rudest?.key?.second ?: "",
-            players = rudest?.value?.toMutableList() ?: mutableListOf()
-        )
+    fun getForwards(): List<Player> {
+        return players.filter { it.position == "FORWARD" }
+    }
+    
+    fun getForwardsGoalsVsTransferCost(): List<Pair<Long, Int>> {
+        return getForwards().map { Pair(it.transferCost, it.goals) }
     }
 }
