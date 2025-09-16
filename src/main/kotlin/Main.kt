@@ -17,14 +17,12 @@ fun main(args: Array<String>) {
         val germanPlayerPosition = resolver.getTheExpensiveGermanPlayerPosition()
         val rudestTeam = resolver.getTheRudestTeam()
 
-
         println("""
-            1. Игроков без агенства: ${countWithoutAgency}
+            1. Игроков без агенства: $countWithoutAgency
             2. Лучший бомбардиро среди защитников: ${bestScorerDefender.first} c ${bestScorerDefender.second} голами
             3. Позиция самого дорогого немецкого игрока: $germanPlayerPosition
             4. Команда с наибольшим средним числом красных карточек: ${rudestTeam.name} из города ${rudestTeam.city}
         """.trimIndent())
-
 
         val goalToCost = resolver.getForwardsGoalToCost()
 

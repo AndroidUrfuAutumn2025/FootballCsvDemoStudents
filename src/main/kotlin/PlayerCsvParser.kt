@@ -1,5 +1,6 @@
 import model.Player
 import model.Team
+import model.Position
 import csv.parser.CsvParser
 
 class PlayerCsvParser : CsvParser<Player>(
@@ -27,7 +28,7 @@ class PlayerCsvParser : CsvParser<Player>(
                 name = getValue("Team", values),
                 city = getValue("City", values)
             ),
-            position = getValue("Position", values),
+            position = Position.parseString(getValue("Position", values)),
             nationality = getValue("Nationality", values),
             agency = getNullableString("Agency", values),
             transferCost = getLongValue("Transfer cost", values),

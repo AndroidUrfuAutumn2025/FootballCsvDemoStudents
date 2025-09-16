@@ -1,6 +1,7 @@
 package resolver
 
 import model.Player
+import model.Position
 import model.Team
 
 class Resolver(private val players: List<Player>) : IResolver {
@@ -10,7 +11,7 @@ class Resolver(private val players: List<Player>) : IResolver {
 
     override fun getBestScorerDefender(): Pair<String, Int> {
         return players
-            .filter { it.position.equals("DEFENDER", ignoreCase = true) }
+            .filter { it.position == Position.DEFENDER }
             .maxByOrNull { it.goals }
             ?.let { it.name to it.goals }
             ?: throw NoSuchElementException("Защитники с голами не найдены!")
@@ -35,7 +36,7 @@ class Resolver(private val players: List<Player>) : IResolver {
 
     override fun getForwardsGoalToCost(): List<Pair<Int, Long>> {
         return players
-            .filter { it.position.equals("FORWARD", ignoreCase = true) }
+            .filter { it.position == Position.FORWARD }
             .map { it.goals to it.transferCost }
             .sortedBy { it.first }
     }
