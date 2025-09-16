@@ -28,7 +28,6 @@ class Visualizer {
         val plot = chart.plot as PiePlot<*>
         plot.labelGenerator = StandardPieSectionLabelGenerator("{0}: {1} € ({2})")
 
-
         SwingUtilities.invokeLater {
             val frame = JFrame("Трансферная стоимость команд")
             frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE

@@ -30,11 +30,13 @@ object CsvParser {
             nationality = parts[4],
             agency = parts[5],
             transferCost = parts[6].toDouble(),
-            participations = parts[7].toInt(),
-            goals = parts[8].toInt(),
-            assists = parts[9].toInt(),
-            yellowCards = parts[10].toInt(),
-            redCards = parts[11].trim().toInt()
+            participations = parts[7].toIntOrNull().orZero(),
+            goals = parts[8].toIntOrNull().orZero(),
+            assists = parts[9].toIntOrNull().orZero(),
+            yellowCards = parts[10].toIntOrNull().orZero(),
+            redCards = parts[11].toIntOrNull().orZero()
         )
     }
+
+    private fun Int?.orZero() = this ?: 0
 }

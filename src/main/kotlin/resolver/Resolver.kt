@@ -7,7 +7,6 @@ import model.Position
 class Resolver(val allPlayers : List<Player>) : IResolver {
     override fun getCountWithoutAgency(): Int = allPlayers.count{ it.agency.isEmpty() }
 
-
     override fun getBestScorerDefender(): Pair<String, Int> = allPlayers
         .filter{ it.position == Position.DEFENDER }
         .maxBy{ it.goals }
@@ -17,11 +16,9 @@ class Resolver(val allPlayers : List<Player>) : IResolver {
         .filter{ it.nationality == "Germany" }
         .maxBy{ it.transferCost }.position.toRussian()
 
-    override fun getTheRudestTeam(): Team = allPlayers
-        .groupBy{ it.team }
-        .mapValues{ (_, players) -> players.sumOf{ it.redCards } }
-        .maxBy{ it.value }
-        .key
+    override fun getTheRudestTeam(): Team = allPlayers.groupBy { it.team.name }
+        .maxBy { (_, players) -> players.map { it.redCards }.average() }
+        .let { (teamName, _) -> Team(teamName) }
 
     fun getTopHighestTransferCostTeams(teamsCount : Int) : List<Pair<String, Double>> =
         allPlayers
