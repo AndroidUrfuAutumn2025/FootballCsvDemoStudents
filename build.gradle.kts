@@ -12,7 +12,9 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation("org.slf4j:slf4j-nop:2.0.17")
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("org.jfree:jfreechart:1.5.3")
 }
 
 tasks.test {
