@@ -11,7 +11,7 @@ class Resolver(private val players: List<Player>) : IResolver {
 
     override fun getBestScorerDefender(): Pair<String, Int> {
         return players
-            .filter { it.position == Position.DEFENDER }
+            .filter { it.position == Position.Defender }
             .maxByOrNull { it.goals }
             ?.let { it.name to it.goals }
             ?: throw NoSuchElementException("Защитники с голами не найдены!")
@@ -36,7 +36,7 @@ class Resolver(private val players: List<Player>) : IResolver {
 
     override fun getForwardsGoalToCost(): List<Pair<Int, Long>> {
         return players
-            .filter { it.position == Position.FORWARD }
+            .filter { it.position == Position.Forward }
             .map { it.goals to it.transferCost }
             .sortedBy { it.first }
     }

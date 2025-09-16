@@ -7,12 +7,5 @@ class CsvReader : ICsvReader {
     override fun <T> readLines(
         filePath: String,
         parser: ICsvParser<T>
-    ): List<T> {
-        val file = File(filePath)
-        val lines = file.readLines()
-
-        if (lines.isEmpty()) return emptyList()
-
-        return lines.drop(1).map{ parser.parse(it)}
-    }
+    ): List<T> = File(filePath).readLines().drop(1).map(parser::parse)
 }
