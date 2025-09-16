@@ -11,8 +11,10 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation("org.jfree:jfreechart:1.5.4")
+    implementation("org.jfree:jcommon:1.0.24")
     implementation("com.github.javafaker:javafaker:1.0.2")
+    testImplementation(kotlin("test"))
 }
 
 tasks.test {
