@@ -8,4 +8,5 @@ fun main(args: Array<String>) {
     println("Название позиции самого дорогого немецкого игрока: " + method.getTheExpensiveGermanPlayerPosition())
     println("Команда с наибольшим средним числом красных карточек на одного игрока: " + method.getTheRudestTeam().nameTeam)
     PieChartWindow()
+
 }
