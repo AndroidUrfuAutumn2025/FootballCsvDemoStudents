@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     println("Count without agency: $countWithoutAgency")
     println("Best scorer defender: $bestScorerDefender")
     println("The expensive german player position: $expensiveGermanPlayerPosition")
-    println("The rudest team name: ${rudestTeam.name} ${rudestTeam.city}")
+    println("The rudest team name: ${rudestTeam.name} (${rudestTeam.city})")
 
-    Plot.showPlayerSharesByPosition(players, "positions.png")
+    Plot.showDependenceOfGoalsScoredOnTransferCost(players, "dependence.png")
 }

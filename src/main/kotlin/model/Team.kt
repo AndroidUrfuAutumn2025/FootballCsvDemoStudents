@@ -1,3 +1,11 @@
 package model
 
-class Team(var name: String, var city: String, var members: ArrayList<Player> = arrayListOf())
+data class Team(
+    val name: String,
+    val city: String,
+    val members: List<Player> = arrayListOf()
+) {
+    fun addPlayer(player: Player) {
+        this.copy(members = this.members + player);
+    }
+}

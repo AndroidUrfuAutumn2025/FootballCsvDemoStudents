@@ -1,8 +1,16 @@
 package model
 
-class Player(
-    var name: String, var teamName: String, var teamCity: String,
-    var position: String, var nationality: String, var agency: String,
-    var transferCost: Int, var participations: Int, var goals: Int,
-    var assists: Int, var yellowCards: Int, var redCards: Int
+data class Player(
+    val name: String,
+    val teamName: String,
+    val teamCity: String,
+    val position: String,
+    val nationality: String,
+    val agency: String,
+    val transferCost: Int,
+    val participations: Int,
+    val goals: Int,
+    val assists: Int,
+    val yellowCards: Int,
+    val redCards: Int
 )

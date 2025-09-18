@@ -5,36 +5,27 @@ import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
 import org.jetbrains.kotlinx.kandy.dsl.plot
 import org.jetbrains.kotlinx.kandy.letsplot.export.save
 import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
-import org.jetbrains.kotlinx.kandy.letsplot.layers.pie
-import org.jetbrains.kotlinx.kandy.letsplot.scales.BrewerPalette
-import org.jetbrains.kotlinx.kandy.letsplot.scales.categoricalColorBrewer
-import org.jetbrains.kotlinx.kandy.letsplot.style.Style
+import org.jetbrains.kotlinx.kandy.letsplot.layers.points
 import org.jetbrains.kotlinx.kandy.util.color.Color
 
 object Plot {
-    fun showPlayerSharesByPosition(players: ArrayList<Player>, savePath: String) {
-        val goalkeepersNumber = players.count { it.position == "GOALKEEPER" }
-        val forwardsNumber = players.count { it.position == "FORWARD" }
-        val defendersNumber = players.count { it.position == "DEFENDER" }
-        val midfieldersNumber = players.count { it.position == "MIDFIELD" }
+    fun showDependenceOfGoalsScoredOnTransferCost(players: ArrayList<Player>, savePath: String) {
+        val forwards = players.filter { it.position == "FORWARD" }
+        val goalsScored = forwards.map { it.goals }
+        val transferCosts = forwards.map { it.transferCost }
         val dataset = dataFrameOf(
-            "position" to listOf("goalkeeper", "forward", "defender", "midfielder"),
-            "count" to listOf(goalkeepersNumber, forwardsNumber, defendersNumber, midfieldersNumber)
+            "goals" to goalsScored,
+            "costs" to transferCosts
         )
         val plot = dataset.plot {
-            pie {
-                slice("count")
-                fillColor("position") {
-                    scale = categoricalColorBrewer(BrewerPalette.Qualitative.Set1)
-                }
-                size = 20.0
-                stroke = 1.0
-                strokeColor = Color.WHITE
-                hole = 0.5
+            points {
+                x(transferCosts, "Transfer Costs")
+                y(goalsScored, "Goals Scored")
+                size = 2.5
+                color = Color.GREEN
             }
-            layout {
-                style(Style.Void)
-            }
+            layout.title = "The dependence of scored goals on transfer costs"
+            layout.size = 900 to 600
         }
         plot.save(savePath)
     }

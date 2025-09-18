@@ -27,15 +27,16 @@ object CsvParser {
             }
             val splitLine = line.split(splitSymbol)
             val player = parsePlayer(splitLine)
-
             val teamName = player.teamName
             val teamCity = player.teamCity
+
             if(!teams.contains(teamName)) {
                 val newTeam = Team(teamName, teamCity)
-                newTeam.members.add(player);
+                newTeam.addPlayer(player);
                 teams[teamName] = newTeam
             } else {
-                teams[teamName]?.members?.add(player)
+                val existingTeam = teams[teamName];
+                existingTeam?.addPlayer(player)
             }
         }
 
@@ -43,10 +44,19 @@ object CsvParser {
     }
 
     private fun parsePlayer(splitLine: List<String>): Player {
-        return Player(splitLine[0], splitLine[1], splitLine[2],
-            splitLine[3], splitLine[4], splitLine[5],
-            splitLine[6].toInt(), splitLine[7].toInt(), splitLine[8].toInt(),
-            splitLine[9].toInt(), splitLine[10].toInt(), splitLine[11].toInt()
+        return Player(
+            name = splitLine[0],
+            teamName = splitLine[1],
+            teamCity = splitLine[2],
+            position = splitLine[3],
+            nationality = splitLine[4],
+            agency = splitLine[5],
+            transferCost = splitLine[6].toInt(),
+            participations = splitLine[7].toInt(),
+            goals = splitLine[8].toInt(),
+            assists = splitLine[9].toInt(),
+            yellowCards = splitLine[10].toInt(),
+            redCards = splitLine[11].toInt()
         )
     }
 }
