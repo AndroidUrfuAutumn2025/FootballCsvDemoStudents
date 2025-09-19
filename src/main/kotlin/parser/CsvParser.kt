@@ -44,7 +44,7 @@ object CsvParser {
                 red_cards = it[11].toInt()
             )
             players.add(player)
-            var team = teams.find {it.name == player.team}
+            val team = teams.find {it.name == player.team}
             if (team != null) {
                 team.players.add(player)
             }
