@@ -12,7 +12,9 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("org.jfree:jfreechart:1.5.3")
 }
 
 tasks.test {
