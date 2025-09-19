@@ -1,3 +1,4 @@
 package model
-
-class Team
+import model.Person
+import parser.CsvParser
+class Team(var players: MutableList<Person>, val name: String)

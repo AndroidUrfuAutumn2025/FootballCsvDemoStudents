@@ -93,3 +93,5 @@ lint/tmp/
 
 # for MacOS users
 .DS_Store
+
+.idea/
