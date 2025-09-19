@@ -1,48 +1,40 @@
 package resolver
-import model.Person
-import model.Team
-import resolver.IResolver
-import kotlin.math.max
 
-class Resolver(val players: List<Person>, val teams: List<Team>): IResolver{
+import model.Person
+import model.Position
+import model.Team
+
+class Resolver(val players: List<Person>, val teams: List<Team>) : IResolver {
+
     override fun getCountWithoutAgency(): Int {
-        return players.count {it.agency.isEmpty()}
+        return players.count { it.agency.isEmpty() }
     }
 
     override fun getBestScorerDefender(): Pair<String, Int> {
-        return players.filter { it.position == "DEFENDER" }
-            .maxByOrNull { it.goals }
-            ?.let { it.name to it.goals }
+        return players
+            .filter { it.position.toString() == "DEFENDER" }
+            .maxByOrNull { it.goals ?: 0 }
+            ?.let { it.name to (it.goals ?: 0) }
             ?: ("" to 0)
     }
 
     override fun getTheExpensiveGermanPlayerPosition(): String {
-        val positionToRus: Map<String, String> = mapOf(
-            "GOALKEEPER" to "Вратарь",
-            "DEFENDER" to "Защитник",
-            "MIDFIELD" to "Полузащитник",
-            "FORWARD" to "Нападающий")
-        return players.filter { it.nationality == "Germany" }
-            .maxByOrNull { it.transfer_cost }
+        return players
+            .filter { it.nationality == "Germany" }
+            .maxByOrNull { it.transferCost ?: 0 }
             ?.position
-            ?.let {positionToRus[it]}
+            ?.translate
             ?: "No data"
     }
 
-    override fun getTheRudestTeam(): Team {
-        var average: Double = 0.0
-        var team: Team = teams[0]
-        teams.forEach { it ->
-            var red_cards_by_team: Int = 0
-            it.players.forEach {
-                red_cards_by_team += it.red_cards
-            }
-            if(red_cards_by_team / it.players.size > average) {
-                average = (red_cards_by_team / it.players.size).toDouble()
-                team = it
-            }
-        }
-        return team
-    }
 
+    override fun getTheRudestTeam(): Team {
+        require(teams.isNotEmpty()) { "teams must not be empty" }
+
+        return teams
+            .maxByOrNull { team ->
+                val reds = team.players.mapNotNull { it.redCards }
+                if (reds.isEmpty()) 0.0 else reds.average()
+            }!!
+    }
 }

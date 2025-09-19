@@ -4,31 +4,33 @@ import org.jetbrains.kotlinx.kandy.dsl.plot
 import org.jetbrains.kotlinx.kandy.letsplot.export.save
 import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
 import org.jetbrains.kotlinx.kandy.letsplot.layers.bars
-import org.jetbrains.kotlinx.kandy.letsplot.layers.points
 
 class KandyPlot {
     fun main(teams: List<Team>) {
-        val forward_players = teams.flatMap { it.players }
-            .filter { it.position == "FORWARD" }
-        val transferCosts = forward_players.map { it.transfer_cost }
-        val goals = forward_players.map { it.goals }
+        val sortedTeams = teams.sortedByDescending { team ->
+            team.players.sumOf { it.transferCost?: 0 }
+        }
+        val teamNames = sortedTeams.map { it.name }
+        val transferCosts = sortedTeams.map { team ->
+            team.players.sumOf{ it.transferCost?: 0 }
+        }
 
         val df = dataFrameOf(
-            "transfer_cost" to transferCosts,
-            "goals" to goals
+            "teams" to teamNames,
+            "transfer_cost" to transferCosts
         )
 
         val plot = plot(df) {
             layout {
-                title = " relationship between the number of goals scored and the transfer value of forwards"
+                title = "The most expensive teams"
             }
 
-            points {
-                x("goals")
+            bars {
+                x("teams")
                 y("transfer_cost")
             }
         }
 
-        plot.save("Var2.png")
+        plot.save("The most Expensive Teams.png")
     }
 }
