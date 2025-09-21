@@ -1,39 +1,40 @@
+import model.Player
 import model.Team
 import model.readCsv
-import model.readCSV
-import resolver.IResolver
+import resolver.Resolver
 
 fun main(args: Array<String>) {
-    //object {} - создание анонимного объекта
-    //.javaClass - получение объекта Class для этого объекта
-    //.getResourceAsStream("/fakePlayers.csv") - метод для получения потока данных
+    val resolver = Resolver()
+
+    // Чтение игроков через CSVParser
     val inputStream = object {}.javaClass.getResourceAsStream("/fakePlayers.csv")
     if (inputStream != null) {
-        val players = readCSV(inputStream)
-        players.forEach { println("Игрок: ${it.name}") }
+        val players = resolver.readCSVFile(inputStream)
+        players.forEach { println("Игрок: ${it[0]}") }
     } else {
         println("Файл fakePlayers.csv не найден в resources!")
-
     }
+
     print("------------------------------------------------------------------------------")
+
+    // Чтение команд (предполагаю, что это отдельная функция)
     val inputStream2 = object {}.javaClass.getResourceAsStream("/fakePlayers.csv")
     if (inputStream2 != null){
         val teams = readCsv(inputStream2)
-        teams.forEach{ println("Команда игрока ${it.name} это ${it.teamName}")}
+        teams.forEach{ println("Страна команды ${it.teamName} это ${it.city}")}
     } else {
         println("Файл fakePlayers.csv не найден в resources!")
     }
-    print("------------------------------------------------------------------------------")
-    val resolver = object : IResolver {
 
-    }
+    print("------------------------------------------------------------------------------")
+
     val res1 = resolver.getCountWithoutAgency()
     println("Количество игроков без агентства: $res1")
 
     println("------------------------------------------------------------------------------")
 
     val res2 = resolver.getBestScorerDefender()
-    println("Защитник с наибольшими забитыми голами - : $res2")
+    println("Защитник с наибольшими забитыми голами - ${res2.first}: ${res2.second} голов")
 
     println("------------------------------------------------------------------------------")
 
@@ -43,7 +44,18 @@ fun main(args: Array<String>) {
     println("------------------------------------------------------------------------------")
 
     val res4 = resolver.getTheRudestTeam()
-    println("команда с наибольшими средними удалениями на игрока - : $res4")
+    println("Команда с наибольшими средними удалениями на игрока - : $res4")
 
+    println("------------------------------------------------------------------------------")
+
+    val goalToCost = resolver.getForwardsGoalToCost()
+
+    println("\nЗависимость забитых голов к стоимости: ")
+
+    goalToCost.forEach {
+            (goals, cost) -> println("$goals --> ${"%,d".format(cost)} $")
+    }
+
+    goalToCost.visualize(goalToCost)
 
 }

@@ -2,169 +2,29 @@ package resolver
 
 import model.Team
 
-import model.readCSV
-import model.readCsv
-import java.io.InputStream
-
 interface IResolver {
-    fun readCSVFile(inputStream: InputStream): List<List<String>> {
-        return inputStream.bufferedReader().use { reader ->
-            reader.readLines()
-                .map { line -> line.split(";").map { it.trim() } }
-        }
-    }
 
-    fun getCountWithoutAgency(): Int {
-        val res = object{}.javaClass.getResourceAsStream("/fakePlayers.csv")
-        var count = 0
-        if (res != null) {
-            val ag = readCSVFile(res)
-            ag.forEach { parts ->
-
-                if (parts[0] == "Name") return@forEach
-
-                val nationalityIndex = 4
-                val agencyIndex = 5
-
-                if (parts.size > nationalityIndex) {
-                    if (parts.size > agencyIndex) {
-                        val agent = parts[agencyIndex].trim()
-                        if (agent.isBlank() ||
-                            agent.equals("null", ignoreCase = true) ){
-                            count++
-                            println("Игрок без агента: ${parts[0]} (Национальность: ${parts[nationalityIndex]})")
-                        } else {
-                            println("Игрок: ${parts[0]}, Национальность: ${parts[nationalityIndex]}, Агент: $agent")
-                        }
-                    } else {
-                        count++
-                        println("Игрок без агента: ${parts[0]} (Национальность: ${parts[nationalityIndex]}, Agency отсутствует)")
-                    }
-                } else {
-                    count++
-                    println("Игрок без агента (недостаточно данных): ${parts.getOrElse(0) { "Unknown" }}")
-                }
-            }
-            return count
-        } else {
-            println("Файл fakePlayers.csv не найден в resources!")
-            return 0
-        }
-    }
+    // Выведите количество игроков, интересы которых не представляет агенство.
+    fun getCountWithoutAgency(): Int
 
     // Выведите автора наибольшего числа голов из числа защитников и их количество.
-    fun getBestScorerDefender(): Pair<String, Int> {
-        val res = object{}.javaClass.getResourceAsStream("/fakePlayers.csv")
-        val position = "DEFENDER"
-        var max = 0
-        var name = ""
-
-        if (res != null) {
-            val ag = readCSVFile(res)
-            ag.forEach { parts ->
-                // Пропускаем заголовок и проверяем наличие нужных полей
-                if (parts[3].trim() == position) {
-                    val goals = parts[8].toIntOrNull() ?: 0
-                    if (goals >= max) {
-                        max = goals
-                        name = parts[0]
-                    }
-                }
-            }
-            return Pair(name, max)
-        } else {
-            println("Файл fakePlayers.csv не найден в resources!")
-            return Pair("", 0)
-        }
-    }
+    fun getBestScorerDefender(): Pair<String, Int>
 
     // Выведите русское название позиции самого дорогого немецкого игрока.
-    fun getTheExpensiveGermanPlayerInfo(): String {
-        val res = object{}.javaClass.getResourceAsStream("/fakePlayers.csv")
-
-        var maxCost = 0
-        var playerName = ""
-        var englishPosition = ""
-
-        val positionMap = mapOf(
-            "GOALKEEPER" to "Вратарь",
-            "DEFENDER" to "Защитник",
-            "MIDFIELD" to "Полузащитник",
-            "FORWARD" to "Нападающий"
-        )
-
-        readCSVFile(res).forEach { parts ->
-            if (parts[0] == "Name") return@forEach
-
-            val cost = parts[6].toIntOrNull() ?: 0
-            val country = parts.getOrNull(4)?.trim() ?: ""
-
-            if (country.equals("Germany", ignoreCase = true) && cost > maxCost) {
-                maxCost = cost
-                playerName = parts[0]
-                englishPosition = if (parts.getOrNull(3) != null) {
-                    parts[3].trim()
-                } else {
-                    ""
-                }
-            }
-        }
-
-        if (playerName.isNotEmpty()) {
-            val russianPosition = if (positionMap.containsKey(englishPosition.toUpperCase())) {
-                positionMap[englishPosition.toUpperCase()]
-            } else {
-                englishPosition
-            }
-            return "Игрок: " + playerName + ", Позиция: " + russianPosition + ", Стоимость: " + maxCost
-        } else {
-            return "Немецкие игроки не найдены"
-        }
-    }
+    fun getTheExpensiveGermanPlayerPosition(): String
 
     // Выберите команду с наибольшим числом удалений на одного игрока.
-    fun getTheRudestTeam(): String {
-        val res = object{}.javaClass.getResourceAsStream("/fakePlayers.csv")
-
-        val teamRedCards = mutableMapOf<String, Int>()
-        val teamPlayerCount = mutableMapOf<String, Int>()
-
-        res.bufferedReader().use { reader ->
-            var isFirstLine = true
-
-            reader.forEachLine { line ->
-                val parts = line.split(";").map { it.trim() }
-
-                if (isFirstLine) {
-                    isFirstLine = false
-                    return@forEachLine
-                }
-
-                val team = parts[1]
-                val redCards = parts[11].toIntOrNull() ?: 0
-
-                teamRedCards[team] = teamRedCards.getOrDefault(team, 0) + redCards
-                teamPlayerCount[team] = teamPlayerCount.getOrDefault(team, 0) + 1
-            }
-        }
-
-        var rudestTeam = ""
-        var maxAverageRedCards = 0.0
-
-        teamRedCards.forEach { (team, totalRedCards) ->
-            val playerCount = teamPlayerCount[team] ?: 1
-            val averageRedCards = totalRedCards.toDouble() / playerCount
-
-            if (averageRedCards > maxAverageRedCards) {
-                maxAverageRedCards = averageRedCards
-                rudestTeam = team
-            }
-        }
-
-        return if (rudestTeam.isNotEmpty()) {
-            rudestTeam
-        } else {
-            "Команды не найдены"
-        }
-    }
+    fun getTheRudestTeam(): Team
 }
+
+
+
+
+
+
+
+
+
+
+
+

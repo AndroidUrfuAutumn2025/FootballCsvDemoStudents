@@ -3,22 +3,44 @@ import java.io.File
 
 import java.io.InputStream
 
-class Player(val name: String)
+class Player(val name: String, val team: String, val city: String, val position: String,
+             val agency: String, val transferCost: String, val participations: String,
+             val goals: String, val assists: String, val yellowCards: String, val redCards: String)
 
-//InputStream - предоставляет стандартный байтовый способ чтения данных из разных источников.
-fun readCSV(inputStream: InputStream): List<Player>{
-    //.use {reader -> - функция use автоматически закрывает ресурс после использования
-    //bufferedReader- переводим байты в символы
-    return inputStream.bufferedReader().use {reader ->
-        //reader.lineSequence() - создает последовательность (Sequence) строк из reader
-        reader.lineSequence()
-            //.filter {it.isNotBlank()} - фильтрует строки, оставляя только непустые
-            .filter {it.isNotBlank()}
-            //преобразует каждую строку в объект Player
-            .map { line ->
-                val (name) = line.split(";")
-                Player(name)
+
+class CSVParser {
+
+    companion object {
+        fun parsePlayersFromCSV(inputStream: InputStream): List<Player> {
+            return inputStream.bufferedReader().use { reader ->
+                reader.lineSequence()
+                    .filter { it.isNotBlank() }
+                    .map { line -> parsePlayerFromLine(line) }
+                    .toList()
             }
-            .toList()
+        }
+
+
+        private fun parsePlayerFromLine(line: String): Player {
+            val parts = line.split(";")
+
+            if (parts.size < 11) {
+                throw IllegalArgumentException("Недостаточно данных в строке: $line")
+            }
+
+            return Player(
+                name = parts[0].trim(),
+                team = parts[1].trim(),
+                city = parts[2].trim(),
+                position = parts[3].trim(),
+                agency = parts[4].trim(),
+                transferCost = parts[5].trim(),
+                participations = parts[6].trim(),
+                goals = parts[7].trim(),
+                assists = parts[8].trim(),
+                yellowCards = parts[9].trim(),
+                redCards = parts[10].trim()
+            )
+        }
     }
 }

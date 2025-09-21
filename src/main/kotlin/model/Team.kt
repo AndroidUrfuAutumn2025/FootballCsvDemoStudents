@@ -3,7 +3,7 @@ package model
 
 import java.io.InputStream
 
-class Team(val name: String, val teamName: String)
+class Team(val city: String, val teamName: String)
 
 fun readCsv(inputStream: InputStream): List<Team>{
     return inputStream.bufferedReader().use {reader ->
@@ -12,9 +12,9 @@ fun readCsv(inputStream: InputStream): List<Team>{
             .map {line ->
                 val parts = line.split(";")
                 if (parts.size >=2){
-                    val name = parts[0]
+                    val city = parts[2]
                     val teamName = parts[1]
-                    Team(name, teamName)
+                    Team(city, teamName)
                 } else{
                     throw IllegalArgumentException("Неверный формат строки: $line")
                 }
