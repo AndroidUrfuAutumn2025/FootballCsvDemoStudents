@@ -1,9 +1,12 @@
 package resolver
 
 import model.CSVParser
+import model.Player
 import java.io.InputStream
 
 class Resolver{
+
+
     fun readCSVFile(inputStream: InputStream): List<List<String>> {
         return inputStream.bufferedReader().use { reader ->
             reader.readLines()
@@ -154,6 +157,26 @@ class Resolver{
             rudestTeam
         } else {
             "Команды не найдены"
+        }
+    }
+
+    fun getForwardsGoalToCost(): List<Pair<Int, Long>> {
+        val res = object{}.javaClass.getResourceAsStream("/fakePlayers.csv")
+        if (res != null) {
+            // Используем CSVParser для получения списка объектов Player
+            val players = CSVParser.parsePlayersFromCSV(res)
+
+            return players
+                .filter { it.position.equals("FORWARD", ignoreCase = true) } // Фильтруем нападающих
+                .map { player ->
+                    val goals = player.goals.toIntOrNull() ?: 0 // Конвертируем голы в Int
+                    val cost = player.transferCost.toLongOrNull() ?: 0L // Конвертируем стоимость в Long
+                    goals to cost // Возвращаем пару (голы, стоимость)
+                }
+                .sortedBy { it.first } // Сортировка по количеству голов
+        } else {
+            println("Файл fakePlayers.csv не найден!")
+            return emptyList()
         }
     }
 }

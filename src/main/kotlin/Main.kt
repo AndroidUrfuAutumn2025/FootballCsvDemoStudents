@@ -48,14 +48,14 @@ fun main(args: Array<String>) {
 
     println("------------------------------------------------------------------------------")
 
-    val goalToCost = resolver.getForwardsGoalToCost()
+    val goalTo = resolver.getForwardsGoalToCost()
 
     println("\nЗависимость забитых голов к стоимости: ")
 
-    goalToCost.forEach {
+    goalTo.forEach {
             (goals, cost) -> println("$goals --> ${"%,d".format(cost)} $")
     }
 
-    goalToCost.visualize(goalToCost)
+    goalToCost.visualize(goalTo)
 
 }
