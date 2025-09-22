@@ -2,6 +2,18 @@ package resolver
 
 import model.Player
 import model.Team
+import org.jfree.data.category.DefaultCategoryDataset
+import org.jfree.chart.ChartFactory
+import org.jfree.chart.ChartPanel
+import org.jfree.chart.JFreeChart
+import java.awt.Color
+import java.awt.Dimension
+import javax.swing.JFrame
+import javax.swing.JPanel
+import javax.swing.SwingUtilities
+
+
+
 
 class Resolver(private val players: List<Player>) : IResolver {
 
@@ -83,32 +95,87 @@ class Resolver(private val players: List<Player>) : IResolver {
             .take(limit)
     }
 
-    fun printTopTeamsByTransferCost(limit: Int = 10) {
-        val topTeams = getTopTeamsByTransferCost(limit)
-
-        println("\n=== ТОП-$limit КОМАНД ПО СУММАРНОЙ ТРАНСФЕРНОЙ СТОИМОСТИ ===")
-        println("№   Команда".padEnd(30) + "Город".padEnd(20) + "Игроков".padEnd(10) +
-                "Суммарная стоимость".padEnd(25) + "Средняя стоимость")
-        println("-".repeat(90))
-
-        topTeams.forEachIndexed { index, stats ->
-            val number = (index + 1).toString().padEnd(3)
-            val teamName = stats.team.name.padEnd(27)
-            val city = stats.team.city.padEnd(18)
-            val players = stats.playerCount.toString().padEnd(8)
-            val totalCost = formatMoney(stats.totalTransferCost).padEnd(23)
-            val avgCost = formatMoney(stats.averageTransferCost.toLong())
-
-            println("$number $teamName $city $players $totalCost $avgCost")
+    fun showTopTeamsTransferCostChart(limit: Int = 10) {
+        SwingUtilities.invokeLater {
+            val topTeams = getTopTeamsByTransferCost(limit)
+            val dataset = createBarDataset(topTeams)
+            val chart = createBarChart(dataset, limit)
+            displayBarChart(chart)
         }
     }
 
-    private fun formatMoney(amount: Long): String {
-        return when {
-            amount >= 1_000_000_000 -> "%.1f млрд".format(amount / 1_000_000_000.0)
-            amount >= 1_000_000 -> "%.1f млн".format(amount / 1_000_000.0)
-            amount >= 1_000 -> "%.1f тыс".format(amount / 1_000.0)
-            else -> "$amount"
-        } + " €"
+    private fun createBarDataset(topTeams: List<TeamTransferStats>): DefaultCategoryDataset {
+        val dataset = DefaultCategoryDataset()
+
+        topTeams.reversed().forEachIndexed { index, stats ->
+            dataset.addValue(
+                stats.totalTransferCost.toDouble() / 1_000_000.0,
+                "Трансферная стоимость",
+                "${topTeams.size - index}. ${stats.team.name}"
+            )
+        }
+
+        return dataset
+    }
+
+    private fun createBarChart(dataset: DefaultCategoryDataset, limit: Int): JFreeChart {
+        val chart = ChartFactory.createBarChart(
+            null,
+            "Команды",
+            "Трансферная стоимость (млн €)",
+            dataset,
+            org.jfree.chart.plot.PlotOrientation.HORIZONTAL,
+            true,
+            true,
+            false
+        )
+
+        chart.title = org.jfree.chart.title.TextTitle(
+            "ТОП-$limit КОМАНД ПО СУММАРНОЙ ТРАНСФЕРНОЙ СТОИМОСТИ",
+            org.jfree.chart.axis.Axis.DEFAULT_TICK_LABEL_FONT.deriveFont(16f)
+        )
+
+        chart.setBackgroundPaint(Color.white)
+
+        val plot = chart.categoryPlot
+        plot.setBackgroundPaint(Color.lightGray)
+        plot.setOutlinePaint(null)
+
+        val domainAxis = plot.domainAxis
+        domainAxis.setTickLabelFont(org.jfree.chart.axis.Axis.DEFAULT_TICK_LABEL_FONT.deriveFont(10f))
+
+        val rangeAxis = plot.rangeAxis
+        rangeAxis.setStandardTickUnits(org.jfree.chart.axis.NumberAxis.createStandardTickUnits())
+
+        val renderer = plot.renderer as org.jfree.chart.renderer.category.BarRenderer
+        renderer.setSeriesPaint(0, Color(65, 105, 225))
+        renderer.setDrawBarOutline(false)
+        renderer.setShadowVisible(false)
+
+        renderer.setDefaultItemLabelsVisible(true)
+
+        renderer.setDefaultItemLabelFont(org.jfree.chart.axis.Axis.DEFAULT_TICK_LABEL_FONT.deriveFont(10f))
+        renderer.setDefaultItemLabelPaint(Color.BLACK)
+
+        return chart
+    }
+
+    private fun displayBarChart(chart: JFreeChart) {
+        val frame = JFrame("Топ команд по трансферной стоимости")
+        frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+        frame.size = Dimension(1200, 800)
+
+        val chartPanel = ChartPanel(chart).apply {
+            preferredSize = Dimension(1100, 700)
+            setMouseZoomable(true, false)
+        }
+
+        val panel = JPanel()
+        panel.add(chartPanel)
+        frame.contentPane = panel
+
+        frame.pack()
+        frame.setLocationRelativeTo(null)
+        frame.isVisible = true
     }
 }

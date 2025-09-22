@@ -20,7 +20,8 @@ fun main() {
         val rudestTeam = resolver.getTheRudestTeam()
         println("4) Самая грубая команда: ${rudestTeam.name}")
 
-        resolver.printTopTeamsByTransferCost(10)
+        resolver.showTopTeamsTransferCostChart(10)
+
 
     } catch (e: Exception) {
         println("Ошибка: ${e.message}")
