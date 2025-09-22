@@ -8,11 +8,14 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+
 }
 
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("org.jfree:jfreechart:1.5.4")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
