@@ -26,3 +26,12 @@ kotlin {
 application {
     mainClass.set("MainKt")
 }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:dataframe:1.0.0")
+}
+
