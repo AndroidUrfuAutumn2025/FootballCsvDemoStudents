@@ -1,6 +1,6 @@
 package model
 
-class Player(
+data class Player(
     val name: String,
     val team: Team,
     val position: String,
