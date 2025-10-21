@@ -1,3 +1,8 @@
 package model
 
-class Team
+class Team (
+    var nameTeam: String,
+    var cityTeam: String
+) {
+
+}
