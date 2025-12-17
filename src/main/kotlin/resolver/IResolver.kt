@@ -1,6 +1,7 @@
 package resolver
 
 import model.Team
+import model.Position
 
 interface IResolver {
 
@@ -15,4 +16,7 @@ interface IResolver {
 
     // Выберите команду с наибольшим числом удалений на одного игрока.
     fun getTheRudestTeam(): Team
+
+    // Покажите доли игроков по позициям (0.0..1.0) по отношению ко всем игрокам
+    fun getPositionsShare(): Map<Position, Double>
 }
