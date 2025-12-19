@@ -1,18 +1,21 @@
 package resolver
 
+import model.Position
 import model.Team
 
 interface IResolver {
-
-    // Выведите количество игроков, интересы которых не представляет агенство.
+    // 1. Количество игроков без агентства
     fun getCountWithoutAgency(): Int
 
-    // Выведите автора наибольшего числа голов из числа защитников и их количество.
+    // 2. Имя и голы лучшего защитника
     fun getBestScorerDefender(): Pair<String, Int>
 
-    // Выведите русское название позиции самого дорогого немецкого игрока.
+    // 3. Позиция самого дорогого немецкого игрока
     fun getTheExpensiveGermanPlayerPosition(): String
 
-    // Выберите команду с наибольшим числом удалений на одного игрока.
+    // 4. Команда с наибольшим средним числом красных карточек
     fun getTheRudestTeam(): Team
+
+    // ДОПОЛНИТЕЛЬНО: Доли игроков по позициям (для визуализации)
+    fun getPositionsShare(): Map<Position, Double>
 }
