@@ -30,14 +30,16 @@ fun main() {
 
             df.plot {
                 bars {
-                    x("position")
+                    x("position") {
+                        axis.name = "Позиция"
+                    }
                     y("percent") {
-                        axis.name = "Позиция игрока"
+                        axis.name = "Доля игроков, %"
                     }
 
                 }
-                layout.title = "Kandy Getting Started Example"
-            }.save("Started Example.png")
+
+            }.save("Charts.png")
         }
     }
 }
