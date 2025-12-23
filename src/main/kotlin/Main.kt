@@ -1,7 +1,7 @@
 import org.jetbrains.kotlinx.dataframe.api.dataFrameOf
 import org.jetbrains.kotlinx.kandy.dsl.plot
 import org.jetbrains.kotlinx.kandy.letsplot.feature.layout
-import org.jetbrains.kotlinx.kandy.letsplot.feature.position
+import org.jetbrains.kotlinx.kandy.letsplot.export.save
 import org.jetbrains.kotlinx.kandy.letsplot.layers.bars
 import parser.DataLoader
 import resolver.IResolver
@@ -23,12 +23,21 @@ fun main() {
         println("Доля игроков по позициям:")
         positionDistribution.forEach { (positionRus, percent) ->
             println("$positionRus: ${"%.2f".format(percent)}%")
-        val positionDistribution = resolver.getPositionDistribution()
         val df = dataFrameOf(
             "position" to positionDistribution.keys.toList(),
             "percent" to positionDistribution.values.toList()
         )
 
+            df.plot {
+                bars {
+                    x("position")
+                    y("percent") {
+                        axis.name = "Позиция игрока"
+                    }
+
+                }
+                layout.title = "Kandy Getting Started Example"
+            }.save("Started Example.png")
         }
     }
 }

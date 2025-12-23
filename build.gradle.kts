@@ -16,6 +16,7 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kandy-lets-plot:0.8.0")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
 }
 
 tasks.test {
