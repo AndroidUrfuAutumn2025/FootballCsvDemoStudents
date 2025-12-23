@@ -8,11 +8,15 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://packages.jetbrains.team/maven/p/kds/kotlin-ds-maven")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kandy")
 }
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kandy-lets-plot:0.8.0")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
 }
 
 tasks.test {
