@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
     println()
 
     ChartVisualizer.showTopTeamsByTransferValue(teamList)
-
+    //ВАРИАНТ2
     // Программа не завершается сразу — окно с графиком остаётся открытым
     // (JFrame настроен на EXIT_ON_CLOSE, поэтому закрытие окна завершит программу)
 }
