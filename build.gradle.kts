@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation("org.jfree:jfreechart:1.5.5")
     implementation("com.github.javafaker:javafaker:1.0.2")
 }
 
