@@ -3,7 +3,6 @@ plugins {
     application
 }
 
-// Настройка автоматической загрузки toolchain
 kotlin {
     jvmToolchain(21)
 }
