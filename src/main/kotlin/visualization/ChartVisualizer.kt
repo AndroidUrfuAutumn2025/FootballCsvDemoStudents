@@ -21,9 +21,6 @@ object ChartVisualizer {
         "MIDFIELD" to "Полузащитник",
         "GOALKEEPER" to "Вратарь"
     )
-    /**
-     * Вариант 2: Топ-10 команд с наивысшей суммарной трансферной стоимостью
-     */
     fun showTopTeamsByTransferValue(teams: List<Team>) {
         val topTeams = teams.sortedByDescending { it.totalTransferValue }.take(10)
 
